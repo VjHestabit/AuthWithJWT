@@ -1,0 +1,13 @@
+{
+    "name": "AuthWithJWT",
+    "alias": "authwithjwt",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\AuthWithJWT\\Providers\\AuthWithJWTServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
