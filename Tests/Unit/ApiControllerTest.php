@@ -128,12 +128,14 @@ class ApiControllerTest extends TestCase
             'message' => 'User has been logged out'
         ]);
 
+        //Check log table data in database
         $this->assertDatabaseHas('logs', [
             'user_id' => $user->id,
             'ip' => Request::ip(),
             'subject' => 'User Logged Out'
         ]);
 
+        //check token working or not
         $this->assertFalse(JWTAuth::check($token));
     }
 
@@ -173,6 +175,8 @@ class ApiControllerTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
+
+        //Check database password updated or not
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
             'password' => Hash::check($newPassword, $user->password)
