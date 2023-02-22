@@ -288,6 +288,69 @@ class ApiControllerTest extends TestCase
         ]);
     }
 
+    /**
+     * Test get user API endpoint with valid token.
+     *
+     * @return void
+     */
+    public function testGetUserApiWithValidToken()
+    {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => bcrypt('password')
+        ]);
+
+        //Get JwtAuth Token
+        $token = JWTAuth::fromUser($user);
+
+        $response = $this->get(route('auth.get_user', ['token' => $token]));
+
+        // Assert that the response has a 200 status code
+        $response->assertStatus(Response::HTTP_OK);
+
+        $response->assertJson([
+            'status' =>  true,
+            'message' => 'Details Fetch Successfully'
+        ]);
+
+    }
+
+    /**
+     * Test get user API endpoint with invalid token.
+     *
+     * @return void
+     */
+    public function testGetUserApiWithInvalidToken()
+    {
+       // Make a request to the get user endpoint
+        $response = $this->get(route('auth.get_user', ['token' => 'invalid_token']));
+
+        // Assert that the response has a 200 status code
+        $response->assertStatus(Response::HTTP_OK);
+
+        $response->assertJson([
+            'status' =>  'Token is Invalid'
+        ]);
+
+    }
+
+
+
+    /**
+     * Test update user Api endpoint with valid token
+     */
+    public function testUpdateUserApiWithValidToken()
+    {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => bcrypt('password')
+        ]);
+
+        //Get JwtAuth Token
+        $token = JWTAuth::fromUser($user);
+
+    }
+
 
 
 
