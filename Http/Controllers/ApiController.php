@@ -151,11 +151,11 @@ class ApiController extends Controller
         $validate = $request->validated();
         try{
             $authenticate = JWTAuth::authenticate($request->input('token'));
-            $userUpdate = User::find($authenticate->id)->update([
+            $user = User::firstOrCreate(['id'=>$authenticate->id],[
                 'name' => $request->input('name'),
                 'email'=> $request->input('email')
             ]);
-            $user = User::find($authenticate->id);
+
             return response()->json([
                 'status' => true,
                 'message' => 'User updated successfully',
@@ -181,13 +181,11 @@ class ApiController extends Controller
         $validate = $request->validated();
         try{
             $user = JWTAuth::authenticate($request->input('token'));
-
-            $old_password = Hash::make($request->input('old_password'));
-            $userUpdate = User::where('id',$user->id)->where('password',$old_password)->first();
-            if(!$userUpdate){
+            $userUpdate = User::where('id',$user->id)->first();
+            if (!Hash::check($request->input('old_password'), $user->password)) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'User Not Found',
+                    'message' => 'Old Password Not Macthed',
                 ], Response::HTTP_BAD_REQUEST);
             }
             $userUpdate->password = Hash::make($request->input('password'));

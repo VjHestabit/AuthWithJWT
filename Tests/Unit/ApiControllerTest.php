@@ -341,6 +341,9 @@ class ApiControllerTest extends TestCase
      */
     public function testUpdateUserApiWithValidToken()
     {
+        $name = $this->faker->name;
+        $email = $this->faker->safeEmail;
+
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => bcrypt('password')
@@ -348,6 +351,46 @@ class ApiControllerTest extends TestCase
 
         //Get JwtAuth Token
         $token = JWTAuth::fromUser($user);
+
+         // Send request to updateUser method
+        $response = $this->putJson(route('auth.update_user'), [
+            'token' => $token,
+            'name'  => $this->faker->name,
+            'email' => $this->faker->safeEmail
+        ]);
+        //assert that has the response 200
+        $response->assertStatus(Response::HTTP_OK);
+
+        $response->assertJson([
+            'status' =>  true,
+            'message' => 'User updated successfully',
+            'data'    => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email
+            ],
+        ]);
+
+    }
+
+
+    /**
+     * Test update user Api endpoint with invalid token
+     */
+    public function testUpdateUserApiWithInvalidToken()
+    {
+         // Send request to updateUser method
+        $response = $this->putJson(route('auth.update_user'), [
+            'token' => $this->faker->text(30),
+            'name'  => $this->faker->name,
+            'email' => $this->faker->safeEmail
+        ]);
+        //assert that has the response 200
+        $response->assertStatus(Response::HTTP_OK);
+
+        $response->assertJson([
+            'status' =>  'Token is Invalid'
+        ]);
 
     }
 
