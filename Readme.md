@@ -1,16 +1,31 @@
-#Introduction
+# Introduction
+
 
 The Authentication With JWT module is a pre-built and maintained module that provides all the necessary functionality for user authentication in a Laravel project. The module includes features such as user registration, login, logout, forgot password, change password, and authentication logging. By using this module, developers can save time and effort in implementing these common authentication features in their projects, while promoting consistency and standardization in module design and implementation.
 
 
-#Requirement 
+# Requirement 
+
+
 Laravel freamwork -nWidart/laravel-modules package, Implementing JWT authentication, php 7.2 or higher
 
-#Steps to use this module
+## Steps to use this module
+
+
 Step 1: Install Module Package Library  
-        composer require nwidart/laravel-modules
+
+
+``` bash
+composer require nwidart/laravel-modules
+```
+
 Step 2:- Install the JWT Package inside the root directory 
-         composer require tymon/jwt-auth
+
+``` bash
+composer require tymon/jwt-auth
+```
+
+
 Step 3:- Open app/Http/Kernel.php and paste the below command
         'jwt.verify' => \Modules\AuthWithJWT\Http\Middleware\JWTMiddleware::class,
         'jwt.auth' => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
