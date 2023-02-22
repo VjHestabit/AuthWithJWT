@@ -18,16 +18,7 @@ use Illuminate\Support\Str;
 
 class ApiControllerTest extends TestCase
 {
-    use  WithFaker, RefreshDatabase;
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $this->assertTrue(true);
-    }
+    use  WithFaker, DatabaseTransactions;
 
     /**
      * Test User Successfully register
@@ -37,7 +28,6 @@ class ApiControllerTest extends TestCase
         $name = $this->faker->name;
         $email = $this->faker->safeEmail;
         $password = $this->faker->password;
-        $password_confirmation = $password;
 
         $response = $this->postJson(route('auth.register'), [
             'name' => $name,
@@ -63,7 +53,7 @@ class ApiControllerTest extends TestCase
             'password_confirmation' => 'short'
         ]);
 
-
+        // Assert status
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors(['name', 'email', 'password']);
     }
@@ -121,12 +111,13 @@ class ApiControllerTest extends TestCase
     /**
      * Check User can Logout
      */
-    public function test_user_can_logout()
+    public function testUserCanLogout()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => bcrypt('password')
         ]);
+        //Get JwtAuth Token
         $token = JWTAuth::fromUser($user);
 
         $response = $this->get(route('auth.logout', ['token' => $token]));
@@ -149,7 +140,7 @@ class ApiControllerTest extends TestCase
     /**
      * Check With Invalid Token
      */
-    public function test_logout_fails_with_invalid_token()
+    public function testLogoutFailsWithInvalidToken()
     {
         $response = $this->get(route('auth.logout', ['token' => 'invalid_token']));
 
@@ -212,11 +203,11 @@ class ApiControllerTest extends TestCase
     }
 
     /**
-     * Test the "forgot password" feature with invalid email
+     * Test the forgot password feature with invalid email
      *
      * @return void
      */
-    public function test_forgot_password_with_invalid_email()
+    public function testForgotPasswordWithInvalidEmail()
     {
         Mail::fake();
         $response = $this->postJson(route('auth.forget_password'), ['email' => $this->faker->unique()->safeEmail]);
@@ -225,22 +216,31 @@ class ApiControllerTest extends TestCase
         Mail::assertNothingSent();
     }
 
-
-    public function test_forgot_password_with_valid_email()
-    {
-        Mail::fake();
-
-        $user = User::factory()->create();
-        $response = $this->postJson(route('auth.forget_password'), ['email' => $user->email]);
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
-    }
-
     /**
-     * Test the "forgot password" feature with failed mail sending
+     * Test the forgot password feature with valid mail
      *
      * @return void
      */
-    public function test_forgot_password_with_failed_mail_sending()
+    public function testForgotPasswordWithValidEmail()
+    {
+        // Create a test user
+        $user = User::factory()->create();
+
+        // Make a request to the forgot password endpoint
+        $response = $this->postJson(route('auth.forget_password'), [
+            'email' => $user->email,
+        ]);
+
+        // Assert that the response has a 200 status code
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    /**
+     * Test the forgot password feature with failed mail sending
+     *
+     * @return void
+     */
+    public function testForgotPasswordWithFailedMailSending()
     {
         Mail::shouldReceive('to')->andThrow(new \Exception('Mail sending failed'));
         $user = User::factory()->create();
@@ -265,6 +265,7 @@ class ApiControllerTest extends TestCase
             'token' => $token,
         ]);
 
+        // Assert that the response has a 200 status code
         $response->assertStatus(Response::HTTP_OK);
 
     }
