@@ -1,0 +1,274 @@
+{
+	"info": {
+		"_postman_id": "4c6d6f2e-588b-44fa-8af1-916f0b714a38",
+		"name": "AuthWithJWT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\" : \"Vaibhav Jain\",\n    \"email\" : \"jain.vjain98@gmail.com\",\n    \"password\" : \"1234567\",\n    \"password_confirmation\" : \"1234567\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/register",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"jain.vjain98@gmail.com\",\n    \"password\" : \"1234567\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/login",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch User Data",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjc2OTYyODA5LCJleHAiOjE2NzY5NjY0MDksIm5iZiI6MTY3Njk2MjgwOSwianRpIjoiemZqU3dFallmdHcyZGMyQiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.xr1MoAl5CAKLcsZaFZ1Oz4nRxMJAH88lUIqNZ4jCQsY\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/get_user",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"get_user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User Data",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTY3NjkwMDU3MCwiZXhwIjoxNjc2OTA0MTcwLCJuYmYiOjE2NzY5MDA1NzAsImp0aSI6ImN3Rm1CUlBPZ3hHdGVIajEiLCJzdWIiOjIsInBydiI6IjdjNjQ2Y2ZkMDMyYzg3ZTc0NDBkMTk3YmJlNTVkZjFkN2UxYzNjMmUifQ.5y_mHPfFgIIxb4zd_6dU3QmBt7Q6lWzablsTgOFrbFo\",\n    \"name\" : \"Vaibhav Jain\",\n    \"email\" : \"jain.vjain98@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/update_user",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"update_user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTY3NjkwMDU3MCwiZXhwIjoxNjc2OTA0MTcwLCJuYmYiOjE2NzY5MDA1NzAsImp0aSI6ImN3Rm1CUlBPZ3hHdGVIajEiLCJzdWIiOjIsInBydiI6IjdjNjQ2Y2ZkMDMyYzg3ZTc0NDBkMTk3YmJlNTVkZjFkN2UxYzNjMmUifQ.5y_mHPfFgIIxb4zd_6dU3QmBt7Q6lWzablsTgOFrbFo\",\n    \"old_password\" : \"1234567\",\n    \"password\" : \"987654321\",\n    \"password_confirmation\" : \"987654321\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/change-password",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"change-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjc2OTc2NzkzLCJleHAiOjE2NzY5ODAzOTMsIm5iZiI6MTY3Njk3Njc5MywianRpIjoicG54NHVkZ3B4VFRPUVlHeCIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.ndz8-zY3PvEaWM0NwvwLxK7tT9GCoEBzXQqUe_n14ZE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/logout",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Forget Password",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"jain.vjain98@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/forgot-password",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"forgot-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch User Logs",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTY3NjkwMzA4NiwiZXhwIjoxNjc2OTA2Njg2LCJuYmYiOjE2NzY5MDMwODYsImp0aSI6InlpWTgwb21yNzZJRllOYmgiLCJzdWIiOjEsInBydiI6IjdjNjQ2Y2ZkMDMyYzg3ZTc0NDBkMTk3YmJlNTVkZjFkN2UxYzNjMmUifQ.gjtjfnsMC3P9ZIyTdQPlXXCXfTkOrWGFR_NLgQBSeFw\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/user-logs",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"user-logs"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

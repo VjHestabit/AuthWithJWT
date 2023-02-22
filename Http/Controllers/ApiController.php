@@ -23,7 +23,13 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ApiController extends Controller
 {
-
+     /**
+     *
+     *  Store a newly registered user information.
+     * @param UserRegistrationRequest $request
+     * @return response
+     *
+     */
 
     public function register(UserRegistrationRequest $request)
     {
@@ -50,6 +56,14 @@ class ApiController extends Controller
         }
     }
 
+    /**
+     *
+     * Verify the user credentials
+     * @param AuthLoginRequest $request
+     * @return response
+     *
+     */
+
     public function authenticate(AuthLoginRequest $request)
     {
         $validate = $request->validated();
@@ -59,7 +73,7 @@ class ApiController extends Controller
                 return response()->json([
                     'status'  => false,
                     'message' => 'Login credentials are invalid'
-                ],Response::HTTP_BAD_REQUEST);
+                ],Response::HTTP_UNAUTHORIZED);
             }
             $log = $this->addLog('User Logged In',Auth::user()->id);
         }catch(JWTException $e){
@@ -74,6 +88,14 @@ class ApiController extends Controller
             'token' => $token
         ],Response::HTTP_OK);
     }
+
+    /**
+     *
+     * Verify the token and make User Logged out
+     * @param AuthenticateRequest $request
+     * @return response
+     *
+     */
 
     public function logout(AuthenticateRequest $request){
         $validate = $request->validated();
@@ -93,6 +115,14 @@ class ApiController extends Controller
         }
     }
 
+    /**
+     *
+     *  Verify the token and fetched the user information
+     * @param AuthenticateRequest $request
+     * @return response
+     *
+     */
+
     public function getUser(AuthenticateRequest $request){
         $validate = $request->validated();
         try{
@@ -109,6 +139,13 @@ class ApiController extends Controller
             ],Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * Update the specified information of user.
+     * @param UserRegistrationRequest $request
+     * @param int $id
+     * @return Response
+     */
 
     public function updateUser(UserRegistrationRequest $request){
         $validate = $request->validated();
@@ -128,9 +165,17 @@ class ApiController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Failed to update the user details'
-            ],Response::HTTP_INTERNAL_SERVER_ERROR);
+            ],Response::HTTP_BAD_REQUEST);
         }
     }
+
+    /**
+     *
+     * Change the user's password
+     * @param ChangePasswordRequest $request
+     * @return Response
+     *
+     */
 
     public function changePassword(ChangePasswordRequest $request){
         $validate = $request->validated();
@@ -143,7 +188,7 @@ class ApiController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'User Not Found',
-                ], Response::HTTP_OK);
+                ], Response::HTTP_BAD_REQUEST);
             }
             $userUpdate->password = Hash::make($request->input('password'));
             $userUpdate->update();
@@ -157,9 +202,17 @@ class ApiController extends Controller
                 'status' => false,
                 'message' => 'Failed to update the password',
                 'data' => array()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
+
+    /**
+     *
+     * Update the password temporary & send the email to user
+     * @param ForgetPasswordRequest $request
+     * @return response
+     *
+     */
 
     public function forgotPassword(ForgetPasswordRequest $request){
         $validate = $request->validated();
@@ -200,6 +253,15 @@ class ApiController extends Controller
         }
     }
 
+    /**
+     *
+     * Function is used to create a log for login & logout
+     * @param $subject
+     * @param $user_id
+     * @return true
+     *
+     */
+
     public function addLog($subject,$user_id){
         Log::create([
             'subject' => $subject,
@@ -208,6 +270,14 @@ class ApiController extends Controller
         ]);
         return true;
     }
+
+    /**
+     *
+     * Fetch the logs records for the user
+     * @param AuthenticateRequest $request
+     * @return response
+     *
+     */
 
     public function userLogs(AuthenticateRequest $request){
         $validate = $request->validated();
@@ -223,7 +293,7 @@ class ApiController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Failed to fetch the user logs'
-            ],Response::HTTP_BAD_REQUEST);
+            ],Response::HTTP_UNAUTHORIZED);
         }
     }
 

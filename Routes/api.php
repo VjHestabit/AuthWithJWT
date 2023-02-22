@@ -20,8 +20,8 @@ use Modules\AuthWithJWT\Http\Controllers\ApiController;
 
     Route::group(['middleware' => ['jwt.verify']], function() {
         Route::get('logout', [ApiController::class, 'logout'])->name('auth.logout');
-        Route::get('get_user',[ApiController::class,'getUser'])->name('auth.get_user');
-        Route::put('update_user',[ApiController::class,'updateUser'])->name('auth.update_user');
+        Route::get('user_profile',[ApiController::class,'getUser'])->name('auth.get_user');
+        Route::put('update_user_profile',[ApiController::class,'updateUser'])->name('auth.update_user');
         Route::post('change-password',[ApiController::class,'changePassword'])->name('auth.change_password');
         Route::post('user-logs',[ApiController::class,'userLogs'])->name('auth.user_logs');
     });
