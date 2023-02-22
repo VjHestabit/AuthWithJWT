@@ -50,10 +50,10 @@ class UserRegistrationRequest extends FormRequest
         return true;
     }
 
-    public function failedValidation(Validator $validator){
+    /*public function failedValidation(Validator $validator){
         throw new HttpResponseException(response()->json([
             'status' => false,
             'message' => $validator->errors()
         ]));
-    }
+    }*/
 }

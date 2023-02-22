@@ -56,7 +56,6 @@ class ApiController extends Controller
         $credentials = $request->only(['email','password']);
         try{
             if(!$token = JWTAuth::attempt($request->only(['email','password']))){
-                echo "HERE 2";
                 return response()->json([
                     'status'  => false,
                     'message' => 'Login credentials are invalid'
@@ -83,7 +82,7 @@ class ApiController extends Controller
             $log = $this->addLog('User Logged Out',$user->id);
             JWTAuth::invalidate($request->input('token'));
             return response()->json([
-                'success' => true,
+                'status' => true,
                 'message' => 'User has been logged out'
             ],Response::HTTP_OK);
         }catch(JWTException $e){
@@ -121,7 +120,7 @@ class ApiController extends Controller
             ]);
             $user = User::find($authenticate->id);
             return response()->json([
-                'success' => true,
+                'status' => true,
                 'message' => 'User updated successfully',
                 'data' => $user
             ], Response::HTTP_OK);
@@ -137,17 +136,25 @@ class ApiController extends Controller
         $validate = $request->validated();
         try{
             $user = JWTAuth::authenticate($request->input('token'));
-            $userUpdate = User::find($user->id)->update([
-                'password' => Hash::make($request->input('password'))
-            ]);
+
+            $old_password = Hash::make($request->input('old_password'));
+            $userUpdate = User::where('id',$user->id)->where('password',$old_password)->first();
+            if(!$userUpdate){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'User Not Found',
+                ], Response::HTTP_OK);
+            }
+            $userUpdate->password = Hash::make($request->input('password'));
+            $userUpdate->update();
             return response()->json([
-                'success' => true,
+                'status' => true,
                 'message' => 'Password Updated Successfully',
                 'data' => $user
             ], Response::HTTP_OK);
         }catch(JWTException $e){
             return response()->json([
-                'success' => false,
+                'status' => false,
                 'message' => 'Failed to update the password',
                 'data' => array()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -171,8 +178,9 @@ class ApiController extends Controller
             $details = [
                 'password' =>$pass
             ];
-            Mail::to($request->input('email'))->send(new ForgetPassword($details));
-            if(Mail::failures()){
+
+            $mail = Mail::to($request->input('email'))->send(new ForgetPassword($details));
+            if(!$mail){
                 return response()->json([
                     'status' => false,
                     'message' => 'Failed to send the mail'
@@ -184,6 +192,7 @@ class ApiController extends Controller
                 ],Response::HTTP_OK);
             }
         }catch(Exception $e){
+             \Log::error($e);
             return response()->json([
                 'status' => false,
                 'message' => 'Failed'

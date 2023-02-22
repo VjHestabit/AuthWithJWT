@@ -16,7 +16,7 @@ use Modules\AuthWithJWT\Http\Controllers\ApiController;
 */
     Route::post('login',[ApiController::class,'authenticate'])->name('auth.login');
     Route::post('register',[ApiController::class,'register'])->name('auth.register');
-    Route::get('forgot-password',[ApiController::class,'forgotPassword'])->name('auth.forget_password');
+    Route::post('forgot-password',[ApiController::class,'forgotPassword'])->name('auth.forget_password');
 
     Route::group(['middleware' => ['jwt.verify']], function() {
         Route::get('logout', [ApiController::class, 'logout'])->name('auth.logout');
