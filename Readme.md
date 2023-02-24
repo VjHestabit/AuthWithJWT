@@ -54,7 +54,8 @@ Request Body:- name(string, required), email (email,required), password (string,
 password_confirmation (same as password)
 Response:- 
 1.1) If Success: HTTP_OK response code :- 200 with JSON containing user information and token
-1.2) If Unsuccess: HTTP_BAD_REQUEST response code :- 400 Bad Request with error message in JSON Format
+1.2) If Unsuccess: HTTP_BAD_REQUEST response code :- 400 Bad Request with error message in
+JSON Format
 ```
 
 
