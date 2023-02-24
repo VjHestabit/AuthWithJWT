@@ -67,7 +67,8 @@ Method:- POST
 Request Body:- email (email,required), password (string,required,min:6)
 Response:- 
 2.1) If Success: HTTP_OK response code :- 200 with JSON containing token
-2.2) If Unsuccess: HTTP_UNAUTHORIZED response code :- 401 Unauthorized with error message in JSON format
+2.2) If Unsuccess: HTTP_UNAUTHORIZED response code :- 401 Unauthorized with error 
+message in JSON format
 ```
 
 
@@ -79,7 +80,8 @@ Method:- GET
 Request Body:- token (required)
 Response:- 
 3.1) If Success: HTTP_OK response code :- 200 with success message in JSON format
-3.2) If Unsuccess: HTTP_INTERNAL_SERVER_ERROR response code :- 500 with error message in JSON format
+3.2) If Unsuccess: HTTP_INTERNAL_SERVER_ERROR response code :- 500 with error message
+in JSON format
 ```
 
 
@@ -91,7 +93,8 @@ Method:- GET
 Request Body:- token (required)
 Response:- 
 4.1) If Success: HTTP_OK response code :- 200 with user information in JSON format
-4.2) If Unsuccess: HTTP_INTERNAL_SERVER_ERROR response code :- 500 with error message in JSON format
+4.2) If Unsuccess: HTTP_INTERNAL_SERVER_ERROR response code :- 500 with error message
+in JSON format
 ```
 
 
@@ -102,7 +105,8 @@ URL:- http://127.0.0.1/api/udpate_user_profile
 Method:- PUT
 Request Body:- token (required), name (string), email (email)
 Response:- 
-5.1) If Success: HTTP_OK response code :- 200 with update users information & fetch the updated information in JSON format
+5.1) If Success: HTTP_OK response code :- 200 with update users information & fetch the 
+updated information in JSON format
 5.2) If Unsuccess: HTTP_BAD_REQUEST response code :- 400 with error message in JSON format
 ```
 
@@ -114,7 +118,8 @@ URL:- http://127.0.0.1/api/forgot-password
 Method:- POST
 Request Body:- email (email,required)
 Response:- 
-6.1) If Success: HTTP_OK response code :- 200 with success message in JSON Format and email will be sent to the user with temporary password
+6.1) If Success: HTTP_OK response code :- 200 with success message in JSON Format and email
+will be sent to the user with temporary password
 6.2) If Unsuccess: HTTP_BAD_REQUEST response code :- 400 with error message in JSON format
 ```
 
@@ -124,10 +129,12 @@ Response:-
 ```bash
 URL:- http://127.0.0.1/api/change-password
 Method:- POST
-Request Body:- old_password (required,string,min:6), password (required,string,min:6), password_confirmation (same as password)
+Request Body:- old_password (required,string,min:6), password (required,string,min:6), 
+password_confirmation (same as password)
 Response:- 
 7.1) If Success: HTTP_OK response code :- 200 with success message in JSON Format.
-7.2) If Unsuccess: HTTP_BAD_REQUEST response code :- 400 (or) HTTP_UNAUTHORIZED response code:- 401 with error message in JSON format
+7.2) If Unsuccess: HTTP_BAD_REQUEST response code :- 400 (or) HTTP_UNAUTHORIZED response
+code:- 401 with error message in JSON format
 ```
 
 
