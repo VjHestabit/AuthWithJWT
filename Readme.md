@@ -50,7 +50,8 @@ Step 5:- Add the Mailer Mail Details in the .env file
 ``` bash
 URL:- http://127.0.0.1/api/register
 Method:- POST
-Request Body:- name(string, required), email (email,required), password (string,required,min:6),password_confirmation (same as password)
+Request Body:- name(string, required), email (email,required), password (string,required,min:6),
+password_confirmation (same as password)
 Response:- 
 1.1) If Success: HTTP_OK response code :- 200 with JSON containing user information and token
 1.2) If Unsuccess: HTTP_BAD_REQUEST response code :- 400 Bad Request with error message in JSON Format
