@@ -81,7 +81,7 @@ class ApiControllerTest extends TestCase
         $response->assertOk()
                  ->assertJson([
                      'status' => true,
-                     'message' => 'Login Successfully',
+                     'message' => __('authwithjwt::messages.user.successfully_login'),
                  ])
                  ->assertJsonStructure([
                      'token',
@@ -125,14 +125,14 @@ class ApiControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
             'status' => true,
-            'message' => 'User has been logged out'
+            'message' => __('authwithjwt::messages.user.successfully_logout')
         ]);
 
         //Check log table data in database
         $this->assertDatabaseHas('logs', [
             'user_id' => $user->id,
             'ip' => Request::ip(),
-            'subject' => 'User Logged Out'
+            'subject' => __('authwithjwt::messages.user.logout')
         ]);
 
         //check token working or not
@@ -148,7 +148,7 @@ class ApiControllerTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
-            'status' => 'Token is Invalid',
+            'status' => __('authwithjwt::messages.invalid_token'),
         ]);
     }
 
@@ -216,7 +216,7 @@ class ApiControllerTest extends TestCase
         Mail::fake();
         $response = $this->postJson(route('auth.forget_password'), ['email' => $this->faker->unique()->safeEmail]);
         $response->assertStatus(Response::HTTP_NOT_FOUND);
-        $response->assertJson(['status' => false, 'message' => 'User Not Found']);
+        $response->assertJson(['status' => false, 'message' => __('authwithjwt::messages.user.not_found')]);
         Mail::assertNothingSent();
     }
 
@@ -288,7 +288,7 @@ class ApiControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
 
             $response->assertJson([
-            'status' => 'Token is Invalid'
+            'status' => __('authwithjwt::messages.invalid_token')
         ]);
     }
 
@@ -314,7 +314,7 @@ class ApiControllerTest extends TestCase
 
         $response->assertJson([
             'status' =>  true,
-            'message' => 'Details Fetch Successfully'
+            'message' => __('authwithjwt::messages.user.successfully_fetch')
         ]);
 
     }
@@ -333,7 +333,7 @@ class ApiControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'status' =>  'Token is Invalid'
+            'status' =>  __('authwithjwt::messages.invalid_token')
         ]);
 
     }
@@ -367,7 +367,7 @@ class ApiControllerTest extends TestCase
 
         $response->assertJson([
             'status' =>  true,
-            'message' => 'User updated successfully',
+            'message' => __('authwithjwt::messages.user.updated'),
             'data'    => [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -393,7 +393,7 @@ class ApiControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'status' =>  'Token is Invalid'
+            'status' => __('authwithjwt::messages.invalid_token'),
         ]);
 
     }
