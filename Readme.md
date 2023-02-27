@@ -42,22 +42,41 @@ Step 5:- Add the Mailer Mail Details in the .env file
 
 
 
-# EndPoints
+## API Reference
 
 
-1) Register
+#### 1) Register user
 
-``` bash
-URL:- http://127.0.0.1/api/register
-Method:- POST
-Request Body:- name(string, required), email (email,required), password (string,required,min:6),
-password_confirmation (same as password)
-Response:- 
-1.1) If Success: HTTP_OK response code :- 200 with JSON containing user information and token
-1.2) If Unsuccess: HTTP_BAD_REQUEST response code :- 400 Bad Request with error message in
-JSON Format
+```http
+ POST /api/register
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `name` | `string`| **Required**. Name |
+| `email` | `email` | **Required**. Email |
+| `password` | `string`| **Required**. Password minimum length of 6 |
+
+##### On Success
+```javascript
+    HTTP/1.1  200
+    Location: /api/register
+    Content-Type: application/json
+ 
+    {
+      "data": {}
+    }
 ```
 
+##### On Error
+```javascript
+    HTTP/1.1  400
+    Location: /api/register
+    Content-Type: application/json
+ 
+    {
+      "error": "Bad Request"
+    }
+```
 
 2) Login
 
