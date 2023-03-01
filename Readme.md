@@ -19,6 +19,33 @@ Step 1: Install Module Package Library
 composer require nwidart/laravel-modules
 ```
 
+Step 1.1: Create Modules folder on root laravel project also register in composer.json
+
+``` bash
+{
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/",
+      "Modules\\": "Modules/"
+    }
+  }
+}
+```
+# Tip: don't forget to run composer dump-autoload afterwards
+
+Step 1.2: clone the code in modules folder
+
+``` bash
+git clone https://github.com/prashanthestabit/AuthWithJWT.git
+```
+# Tip: don't forget to run php artisan module:enable AuthWithJWT afterwards
+
+
+
+``` bash
+composer require nwidart/laravel-modules
+```
+
 Step 2:- Install the JWT Package inside the root directory 
 
 ``` bash
