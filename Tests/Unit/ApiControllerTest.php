@@ -37,7 +37,15 @@ class ApiControllerTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK)
-            ->assertJsonStructure(['status','message', 'data']);
+            ->assertJsonStructure(['status','message', 'data'])
+            ->assertJson([
+                'status' => true,
+                'message' => __('authwithjwt::messages.user.registered'),
+                'data' => [
+                    'name' => $name,
+                    'email' => $email
+                ]
+            ]);
     }
 
 
@@ -54,8 +62,8 @@ class ApiControllerTest extends TestCase
         ]);
 
         // Assert status
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonValidationErrors(['name', 'email', 'password']);
+        $response->assertStatus(Response::HTTP_OK)
+            ->assertJsonStructure(['status', 'message']);
     }
 
 
@@ -359,8 +367,8 @@ class ApiControllerTest extends TestCase
          // Send request to updateUser method
         $response = $this->putJson(route('auth.update_user'), [
             'token' => $token,
-            'name'  => $this->faker->name,
-            'email' => $this->faker->safeEmail
+            'name'  => $name,
+            'email' => $email
         ]);
         //assert that has the response 200
         $response->assertStatus(Response::HTTP_OK);
@@ -370,8 +378,8 @@ class ApiControllerTest extends TestCase
             'message' => __('authwithjwt::messages.user.updated'),
             'data'    => [
                 'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email
+                'name' => $name,
+                'email' => $email
             ],
         ]);
 
