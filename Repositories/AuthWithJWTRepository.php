@@ -9,7 +9,7 @@ use Modules\AuthWithJWT\Entities\Log;
 /* Class AuthWithJWTRepository.
  * This class is responsible for handling database operations related to authentication with JWT.
  */
-class AuthWithJWTRepository
+class AuthWithJWTRepository implements AuthWithJWTInterface
 {
     /**
      * Register a new user with the given data.
@@ -17,7 +17,7 @@ class AuthWithJWTRepository
      * @param array $data
      * @return \App\Models\User
      */
-    public function register($data)
+    public function save($data)
     {
         $user = User::create($data);
         return $user;

@@ -22,6 +22,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Modules\AuthWithJWT\Repositories\AuthWithJWTRepository;
 
+
 class ApiController extends Controller
 {
     protected $auth;
@@ -46,7 +47,7 @@ class ApiController extends Controller
             'password' => Hash::make($request->input('password'))
         ];
 
-        $user = $this->auth->register($data);
+        $user = $this->auth->save($data);
 
         if($user){
             $user['token'] = JWTAuth::attempt($request->only(['email','password']));
