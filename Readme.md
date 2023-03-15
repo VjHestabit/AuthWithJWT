@@ -41,17 +41,12 @@ git clone https://github.com/prashanthestabit/AuthWithJWT.git
 Tip: don't forget to run php artisan module:enable AuthWithJWT afterwards
 
 
-
-``` bash
-composer require nwidart/laravel-modules
-```
-
 Step 2:- Install the JWT Package inside the root directory 
 
 ``` bash
 composer require tymon/jwt-auth
 ```
-For installation and setup jwt read documents https://jwt-auth.readthedocs.io/en/develop/
+For installation and setup jwt [read documents](https://jwt-auth.readthedocs.io/en/develop/)
 
 Step 3:- Open app/Http/Kernel.php and paste the below command
 
