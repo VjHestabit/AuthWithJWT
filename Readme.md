@@ -1,8 +1,6 @@
 # Introduction
 
-
 The Authentication With JWT module is a pre-built and maintained module that provides all the necessary functionality for user authentication in a Laravel project. The module includes features such as user registration, login, logout, forgot password, change password, and authentication logging. By using this module, developers can save time and effort in implementing these common authentication features in their projects, while promoting consistency and standardization in module design and implementation.
-
 
 # Requirement 
 
@@ -12,14 +10,14 @@ Laravel freamwork -nWidart/laravel-modules package, Implementing JWT authenticat
 ## Steps to use this module
 
 
-Step 1: Install Module Package Library  
+#### Step 1: Install [Module Package](https://nwidart.com/laravel-modules/v6/installation-and-setup) Library  
 
 
 ``` bash
 composer require nwidart/laravel-modules
 ```
 
-Step 1.1: Create Modules folder on root laravel project also register in composer.json
+##### Step 1.1: Create Modules folder on root laravel project also register in composer.json
 
 ``` bash
 {
@@ -31,26 +29,26 @@ Step 1.1: Create Modules folder on root laravel project also register in compose
   }
 }
 ```
-Tip: don't forget to run composer dump-autoload afterwards
+#### Tip: don't forget to run composer dump-autoload afterwards
 
-Step 1.2: clone the code in Modules folder
+##### Step 1.2: clone the code in Modules folder
 
 if don't have Modules folder on laravel root then create manually.
 
 ``` bash
-git clone https://github.com/prashanthestabit/AuthWithJWT.git
+git clone https://github.com/Hestabit/AuthWithJWT.git
 ```
-Tip: don't forget to run php artisan module:enable AuthWithJWT afterwards
+##### Tip: don't forget to run php artisan module:enable AuthWithJWT afterwards
 
 
-Step 2:- Install the JWT Package inside the root directory 
+#### Step 2:- Install the JWT Package inside the root directory 
 
 ``` bash
 composer require tymon/jwt-auth
 ```
 For installation and setup jwt [read documents](https://jwt-auth.readthedocs.io/en/develop/)
 
-Step 3:- Open app/Http/Kernel.php and paste the below command
+#### Step 3:- Open app/Http/Kernel.php and paste the below command
 
 ``` bash
 'jwt.verify' => \Modules\AuthWithJWT\Http\Middleware\JWTMiddleware::class,
@@ -59,123 +57,164 @@ Step 3:- Open app/Http/Kernel.php and paste the below command
 ```
 
 
-Step 4:- Run php artisan migrate
+#### Step 4:- Run php artisan migrate
 
 
-Step 5:- Add the Mailer Mail Details in the .env file
+#### Step 5:- Add the Mailer Mail Details in the .env file
 
 
+## Features
 
-# EndPoints
+1) [Register](#1-register)
+2) [Login](#2-login)
+3) [Logout](#3-logout)
+4) [Fetch User Profile](#4-fetchuserprofile)
+5) [Update User Profile](#5-updateuserprofile)
+6) [Forget Password](#6-forgetpassword)
+7) [Change Password](#7-changepassword)
+8) [Audit Logs](#8-auditlogs)
 
-
-1) Register
-
-``` bash
-URL:- http://127.0.0.1/api/register
-Method:- POST
-Request Body:- name(string, required), email (email,required), password (string,required,min:6),
-password_confirmation (same as password)
-Response:- 
-1.1) If Success: HTTP_OK response code :- 200 with JSON containing user information and token
-1.2) If Unsuccess: HTTP_BAD_REQUEST response code :- 400 Bad Request with error message in
-JSON Format
-```
+## EndPoints
 
 
-2) Login
+#### 1. Register
 
 ``` bash
-URL:- http://127.0.0.1/api/login
+URL:- /api/register
+
 Method:- POST
-Request Body:- email (email,required), password (string,required,min:6)
-Response:- 
-2.1) If Success: HTTP_OK response code :- 200 with JSON containing token
-2.2) If Unsuccess: HTTP_UNAUTHORIZED response code :- 401 Unauthorized with error 
-message in JSON format
 ```
 
+Request Body:-
 
-3) Logout
+|    Parameter        |     Type           |     Required        |          Description           |
+|:-------------------:|:------------------:|:-------------------:|:------------------------------:|
+|     name            |     string         |       Yes           |       Name of the user         |
+|     email           |     email          |       Yes           |       Email of the user        |
+|    password         |     string         |       Yes           |       Password of the user     |
+|password_confirmation|     string         |       Yes           |       Confirm Pasword          |
+
+
+
+
+#### 2. Login
+
+``` bash
+URL:- api/login
+
+Method:- POST
+```
+
+Request Body:-
+
+|    Parameter        |     Type           |     Required        |          Description           |
+|:-------------------:|:------------------:|:-------------------:|:------------------------------:|
+|     email           |     email          |       Yes           |       Email of the user        |
+|    password         |     string         |       Yes           |       Password of the user     |
+
+
+
+#### 3. Logout
 
 ```bash
-URL:- http://127.0.0.1/api/logout
+URL:- api/logout
+
 Method:- GET
-Request Body:- token (required)
-Response:- 
-3.1) If Success: HTTP_OK response code :- 200 with success message in JSON format
-3.2) If Unsuccess: HTTP_INTERNAL_SERVER_ERROR response code :- 500 with error message
-in JSON format
 ```
 
+Request Body:- 
+|    Parameter        |     Type           |     Required        |          Description           |
+|:-------------------:|:------------------:|:-------------------:|:------------------------------:|
+|     token           |     string         |       Yes           |      JWT Token                 |
 
-4) Fetch User Profile
+
+
+#### 4. FetchUserProfile
 
 ```bash
-URL:- http://127.0.0.1/api/user_profile
+URL:- api/user_profile
+
 Method:- GET
-Request Body:- token (required)
-Response:- 
-4.1) If Success: HTTP_OK response code :- 200 with user information in JSON format
-4.2) If Unsuccess: HTTP_INTERNAL_SERVER_ERROR response code :- 500 with error message
-in JSON format
 ```
+Request Body:- 
+
+|    Parameter        |     Type           |     Required        |          Description           |
+|:-------------------:|:------------------:|:-------------------:|:------------------------------:|
+|     token           |     string         |       Yes           |       JWT Token                |
 
 
-5) Update User Profile
+
+#### 5. UpdateUserProfile
 
 ```bash
-URL:- http://127.0.0.1/api/udpate_user_profile
+URL:- api/udpate_user_profile
+
 Method:- PUT
-Request Body:- token (required), name (string), email (email)
-Response:- 
-5.1) If Success: HTTP_OK response code :- 200 with update users information & fetch the 
-updated information in JSON format
-5.2) If Unsuccess: HTTP_BAD_REQUEST response code :- 400 with error message in JSON format
 ```
 
+Request Body:-
 
-6) Forget Password
+|    Parameter        |     Type           |     Required        |          Description           |
+|:-------------------:|:------------------:|:-------------------:|:------------------------------:|
+|     name            |     string         |       Yes           |       Name of the user         |
+|     email           |     email          |       Yes           |       Email of the user        |
+|    token            |     string         |       Yes           |       JWT Token                |
+
+
+
+#### 6. ForgetPassword
 
 ```bash
-URL:- http://127.0.0.1/api/forgot-password
+URL:- api/forgot-password
+
 Method:- POST
+```
+
 Request Body:- email (email,required)
-Response:- 
-6.1) If Success: HTTP_OK response code :- 200 with success message in JSON Format and email
-will be sent to the user with temporary password
-6.2) If Unsuccess: HTTP_BAD_REQUEST response code :- 400 with error message in JSON format
-```
+
+|    Parameter        |     Type           |     Required        |          Description           |
+|:-------------------:|:------------------:|:-------------------:|:------------------------------:|
+|     email           |     email          |       Yes           |       Email of the user        |
 
 
-7) Change Password
+#### 7. ChangePassword
 
 ```bash
-URL:- http://127.0.0.1/api/change-password
+URL:- api/change-password
+
 Method:- POST
-Request Body:- old_password (required,string,min:6), password (required,string,min:6), 
+```
+ old_password (required,string,min:6), password (required,string,min:6), 
 password_confirmation (same as password)
-Response:- 
-7.1) If Success: HTTP_OK response code :- 200 with success message in JSON Format.
-7.2) If Unsuccess: HTTP_BAD_REQUEST response code :- 400 (or) HTTP_UNAUTHORIZED response
-code:- 401 with error message in JSON format
-```
+
+Request Body:-
+
+|    Parameter        |     Type           |     Required        |          Description           |
+|:-------------------:|:------------------:|:-------------------:|:------------------------------:|
+|   old_password      |     string         |       Yes           |       Old password of the user |
+|    password         |     string         |       Yes           |       Password of the user     |
+|password_confirmation|     string         |       Yes           |       Confirm Pasword          |
+|    token            |     string         |       Yes           |       JWT Token                |
 
 
-7) Audit Logs
+
+#### 8. AuditLogs
 
 ```bash
-URL:- http://127.0.0.1/api/user-logs
+URL:- api/user-logs
+
 Method:- POST
-Request Body:- token (required)
-Response:- 
-7.1) If Success: HTTP_OK response code :- 200 with users logs data in JSON Format.
-7.2) If Unsuccess: HTTP_UNAUTHORIZED response code:- 401 with error message in JSON format
 ```
+Request Body:-
+
+|    Parameter        |     Type           |     Required        |          Description           |
+|:-------------------:|:------------------:|:-------------------:|:------------------------------:|
+|    token            |     string         |       Yes           |       JWT Token                |
+
 
 
 ## NOTE:- For testing the api you can run the following command
  
 ```bash
-php artisan test Modules/AuthWithJWT/Tests/Unit/ApiControllerTest.php
+  php artisan test Modules/AuthWithJWT/Tests/Unit/ApiControllerTest.php
 ```
