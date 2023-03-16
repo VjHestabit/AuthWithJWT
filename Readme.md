@@ -33,7 +33,9 @@ Step 1.1: Create Modules folder on root laravel project also register in compose
 ```
 Tip: don't forget to run composer dump-autoload afterwards
 
-Step 1.2: clone the code in modules folder
+Step 1.2: clone the code in Modules folder
+
+if don't have Modules folder on laravel root then create manually.
 
 ``` bash
 git clone https://github.com/prashanthestabit/AuthWithJWT.git

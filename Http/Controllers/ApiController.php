@@ -27,6 +27,8 @@ class ApiController extends Controller
 {
     protected $auth;
 
+    const TRYAGAIN = 'authwithjwt::messages.try_again';
+
     public function __construct(AuthWithJWTRepository $auth)
     {
         $this->auth = $auth;
@@ -49,7 +51,7 @@ class ApiController extends Controller
 
         $user = $this->auth->save($data);
 
-        if($user){
+        if ($user) {
             $user['token'] = JWTAuth::attempt($request->only(['email','password']));
 
             $this->auth->addLog(__('authwithjwt::messages.user.login'),$user->id);
@@ -60,15 +62,15 @@ class ApiController extends Controller
                 'data'   => $data,
             ];
 
-            return $this->auth->responseMessage($responseData,Response::HTTP_OK);
-        }else{
+            return $this->auth->responseMessage($responseData, Response::HTTP_OK);
+        } else {
             $responseData = [
                 'status' => false,
                 'message'=> __('authwithjwt::messages.user.registered_failed'),
                 'data'   => [],
             ];
 
-            return $this->auth->responseMessage($responseData,Response::HTTP_BAD_REQUEST);
+            return $this->auth->responseMessage($responseData, Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -82,11 +84,11 @@ class ApiController extends Controller
 
     public function authenticate(AuthLoginRequest $request)
     {
-        $validate = $request->validated();
-        $credentials = $request->only(['email','password']);
-        try{
-            if(!$token = JWTAuth::attempt($credentials)){
+        $request->validated();
 
+        $credentials = $request->only(['email','password']);
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
                 $responseData = [
                     'status' => false,
                     'message'=> __('authwithjwt::messages.user.invalid_credentials'),
@@ -95,16 +97,16 @@ class ApiController extends Controller
                 return $this->auth->responseMessage($responseData,Response::HTTP_UNAUTHORIZED);
             }
 
-            $log = $this->auth->addLog(__('authwithjwt::messages.user.login'),Auth::user()->id);
+            $this->auth->addLog(__('authwithjwt::messages.user.login'), Auth::user()->id);
 
-        }catch(JWTException $e){
+        } catch (JWTException $e) {
 
             $responseData = [
                  'status' => false,
                 'message' => __('authwithjwt::messages.missing_token')
             ];
 
-            return $this->auth->responseMessage($responseData,Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->auth->responseMessage($responseData, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $responseData = [
@@ -113,7 +115,7 @@ class ApiController extends Controller
             'token' => $token
         ];
 
-        return $this->auth->responseMessage($responseData,Response::HTTP_OK);
+        return $this->auth->responseMessage($responseData, Response::HTTP_OK);
     }
 
     /**
@@ -124,25 +126,26 @@ class ApiController extends Controller
      *
      */
 
-    public function logout(AuthenticateRequest $request){
-        $validate = $request->validated();
-        try{
+    public function logout(AuthenticateRequest $request)
+    {
+         $request->validated();
+        try {
             $user = JWTAuth::authenticate($request->input('token'));
-            $this->auth->addLog(__('authwithjwt::messages.user.logout'),$user->id);
+            $this->auth->addLog(__('authwithjwt::messages.user.logout'), $user->id);
             JWTAuth::invalidate($request->input('token'));
 
             $responseData = [
                 'status' => true,
                 'message' => __('authwithjwt::messages.user.successfully_logout')
             ];
-            return $this->auth->responseMessage($responseData,Response::HTTP_OK);
+            return $this->auth->responseMessage($responseData, Response::HTTP_OK);
 
-        }catch(JWTException $e){
+        } catch (JWTException $e) {
             $responseData = [
                 'status' => false,
-                'message' => __('authwithjwt::messages.try_again'),
+                'message' => __(self::TRYAGAIN),
             ];
-            return $this->auth->responseMessage($responseData,Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->auth->responseMessage($responseData, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -155,21 +158,21 @@ class ApiController extends Controller
      */
 
     public function getUser(AuthenticateRequest $request){
-        $validate = $request->validated();
-        try{
+       $request->validated();
+        try {
             $user = JWTAuth::authenticate($request->input('token'));
             $responseData = [
                 'status' => true,
                 'message' => __('authwithjwt::messages.user.successfully_fetch'),
                 'data' => $user
             ];
-            return $this->auth->responseMessage($responseData,Response::HTTP_OK);
-        }catch(JWTException $e){
+            return $this->auth->responseMessage($responseData, Response::HTTP_OK);
+        } catch (JWTException $e) {
             $responseData = [
                 'status' => false,
-                'message' => __('authwithjwt::messages.try_again'),
+                'message' => __(self::TRYAGAIN),
             ];
-            return $this->auth->responseMessage($responseData,Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->auth->responseMessage($responseData, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -180,9 +183,10 @@ class ApiController extends Controller
      * @return Response
      */
 
-    public function updateUser(UserRegistrationRequest $request){
+    public function updateUser(UserRegistrationRequest $request)
+    {
 
-        try{
+        try {
             $authenticate = JWTAuth::authenticate($request->input('token'));
             $condition = [
                 'id'=>$authenticate->id
@@ -198,13 +202,13 @@ class ApiController extends Controller
                 'message' => __('authwithjwt::messages.user.updated'),
                 'data' => $user
             ];
-            return $this->auth->responseMessage($responseData,Response::HTTP_OK);
-        }catch(JWTException $e){
+            return $this->auth->responseMessage($responseData, Response::HTTP_OK);
+        } catch (JWTException $e) {
             $responseData = [
                 'status' => false,
-                'message' => __('authwithjwt::messages.try_again'),
+                'message' => __(self::TRYAGAIN),
             ];
-            return $this->auth->responseMessage($responseData,Response::HTTP_BAD_REQUEST);
+            return $this->auth->responseMessage($responseData, Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -216,9 +220,10 @@ class ApiController extends Controller
      *
      */
 
-    public function changePassword(ChangePasswordRequest $request){
-        $validate = $request->validated();
-        try{
+    public function changePassword(ChangePasswordRequest $request)
+    {
+         $request->validated();
+        try {
             $user = JWTAuth::authenticate($request->input('token'));
             if (!Hash::check($request->input('old_password'), $user->password)) {
                 return response()->json([
@@ -236,15 +241,15 @@ class ApiController extends Controller
                 'message' => __('authwithjwt::messages.user.password_updated'),
                 'data' => $userData
             ];
-            return $this->auth->responseMessage($responseData,Response::HTTP_OK);
+            return $this->auth->responseMessage($responseData, Response::HTTP_OK);
 
-        }catch(JWTException $e){
+        } catch (JWTException $e) {
             $responseData = [
                 'status' => false,
                 'message' => __('authwithjwt::messages.user.password_failed'),
                 'data' => array()
             ];
-            return $this->auth->responseMessage($responseData,Response::HTTP_UNAUTHORIZED);
+            return $this->auth->responseMessage($responseData, Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -256,47 +261,55 @@ class ApiController extends Controller
      *
      */
 
-    public function forgotPassword(ForgetPasswordRequest $request){
-        $validate = $request->validated();
-        try{
+    public function forgotPassword(ForgetPasswordRequest $request) {
+
+        $request->validated();
+
+        try {
             $user = $this->auth->show(['email'=>$request->input('email')]);
-            if(!$user){
+            if (!$user) {
                 $responseData = [
                     'status' => false ,
                     'message' => __('authwithjwt::messages.user.not_found')
                 ];
-                return $this->auth->responseMessage($responseData,Response::HTTP_NOT_FOUND);
+                return $this->auth->responseMessage($responseData, Response::HTTP_NOT_FOUND);
             }
 
             $pass = Str::random(6);
             $where = ['id' => $user->id];
             $data = ['password'=> Hash::make($pass),'password_status' => 1];
-            $userData =  $this->auth->updateOrCreate($where,$data);
+            $this->auth->updateOrCreate($where, $data);
             $details = [
                 'password' =>$pass
             ];
 
-            $mail = Mail::to($request->input('email'))->send(new ForgetPassword($details));
-            if(!$mail){
-                $responseData = [
-                    'status' => false,
-                    'message' => __('authwithjwt::messages.mail_failed')
-                ];
-                return $this->auth->responseMessage($responseData,Response::HTTP_UNAUTHORIZED);
-            }else{
-                $responseData = [
-                    'status' => true,
-                    'message' => __('authwithjwt::messages.mail_sent')
-                ];
-                return $this->auth->responseMessage($responseData,Response::HTTP_OK);
-            }
-        }catch(Exception $e){
+            $this->sendMail($request, $details);
+
+        } catch (Exception $e) {
             $responseData = [
                 'status' => false,
                 'message' => 'Failed'
             ];
-            return $this->auth->responseMessage($responseData,Response::HTTP_BAD_REQUEST);
+            return $this->auth->responseMessage($responseData, Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    protected function sendMail($request, $details)
+    {
+        $mail = Mail::to($request->input('email'))->send(new ForgetPassword($details));
+            if (!$mail) {
+                $responseData = [
+                    'status' => false,
+                    'message' => __('authwithjwt::messages.mail_failed')
+                ];
+                return $this->auth->responseMessage($responseData, Response::HTTP_UNAUTHORIZED);
+            } else {
+                $responseData = [
+                    'status' => true,
+                    'message' => __('authwithjwt::messages.mail_sent')
+                ];
+                return $this->auth->responseMessage($responseData, Response::HTTP_OK);
+            }
     }
 
 
@@ -308,22 +321,22 @@ class ApiController extends Controller
      *
      */
     public function userLogs(AuthenticateRequest $request){
-        $validate = $request->validated();
-        try{
+        $request->validated();
+        try {
             $authenticate = JWTAuth::authenticate($request->input('token'));
-            $logs = Log::where('user_id',$authenticate->id)->latest()->get();
+            $logs = Log::where('user_id', $authenticate->id)->latest()->get();
             $responseData = [
                 'status'  => true,
                 'message' => __('authwithjwt::messages.user.logs'),
                 'date' => $logs
             ];
-            return $this->auth->responseMessage($responseData,Response::HTTP_OK);
-        }catch(JWTException $e){
+            return $this->auth->responseMessage($responseData, Response::HTTP_OK);
+        } catch (JWTException $e) {
             $responseData = [
                 'status'  => true,
                 'message' => __('authwithjwt::messages.user.failed_logs'),
             ];
-            return $this->auth->responseMessage($responseData,Response::HTTP_UNAUTHORIZED);
+            return $this->auth->responseMessage($responseData, Response::HTTP_UNAUTHORIZED);
         }
     }
 

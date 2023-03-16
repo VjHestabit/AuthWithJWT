@@ -6,19 +6,18 @@ use App\Models\User;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use Modules\AuthWithJWT\Entities\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 class ApiControllerTest extends TestCase
 {
     use  WithFaker, DatabaseTransactions;
+
+    const INVALIDTOKEN = 'authwithjwt::messages.invalid_token';
 
     /**
      * Test User Successfully register
@@ -156,7 +155,8 @@ class ApiControllerTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
-            'status' => __('authwithjwt::messages.invalid_token'),
+            'status' => __(self::INVALIDTOKEN),
+            'message' => []
         ]);
     }
 
@@ -269,7 +269,7 @@ class ApiControllerTest extends TestCase
     public function testUserLogsApiWithValidToken()
     {
         $user = User::factory()->create();
-        $logs = Log::factory()->count(5)->create(['user_id' => $user->id]);
+        Log::factory()->count(5)->create(['user_id' => $user->id]);
 
         $token = JWTAuth::fromUser($user);
 
@@ -296,7 +296,7 @@ class ApiControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
 
             $response->assertJson([
-            'status' => __('authwithjwt::messages.invalid_token')
+            'status' => __(self::TRYAGAIN)
         ]);
     }
 
@@ -341,7 +341,7 @@ class ApiControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'status' =>  __('authwithjwt::messages.invalid_token')
+            'status' =>  __(self::INVALIDTOKEN)
         ]);
 
     }
